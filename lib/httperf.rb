@@ -4,7 +4,7 @@ module Httperf
   def run(conf)
     res = Hash["started at", Time.now]
 
-    httperf_opt = conf.keys.grep(/httperf/).collect {|k| "--#{k.gsub(/httperf_/, '')}=#{conf[k]}"}.join(" ")
+    httperf_opt = generate_httperf_opts(conf)
     httperf_cmd = "httperf --hog --server=#{conf['host']} --port=#{conf['port']} --uri='#{conf['uri']}' #{httperf_opt}"
     IO.popen("#{httperf_cmd} 2>&1") do |pipe|
       res.merge! parse_output(pipe)
@@ -18,7 +18,15 @@ module Httperf
         end
       end
     end
-    res 
+    res
+  end
+
+  def generate_httperf_opts(conf)
+    conf.keys.grep(/httperf/).collect do |k|
+      httperf_opt = "--#{k.gsub(/httperf_/, '')}"
+      # Decides if the option accept arguments (ie --session-cookies doesn't)
+      conf[k].to_s.empty? ? httperf_opt : "#{httperf_opt}=#{conf[k]}"
+    end.join("  ")
   end
 
   def parse_output(pipe)
