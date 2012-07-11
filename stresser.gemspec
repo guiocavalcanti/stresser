@@ -51,26 +51,10 @@ Gem::Specification.new do |s|
      "spec/spec_helper.rb"
   ]
 
-  if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
-    s.specification_version = 3
 
-    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<ruport>, [">= 0"])
-      s.add_runtime_dependency(%q<gruff>, [">= 0"])
-      s.add_runtime_dependency(%q<OptionParser>, [">= 0"])
-      s.add_runtime_dependency(%q<trollop>, [">= 0"])
-    else
-      s.add_dependency(%q<ruport>, [">= 0"])
-      s.add_dependency(%q<gruff>, [">= 0"])
-      s.add_dependency(%q<OptionParser>, [">= 0"])
-      s.add_dependency(%q<trollop>, [">= 0"])
-    end
-  else
-    s.add_dependency(%q<ruport>, [">= 0"])
-    s.add_dependency(%q<gruff>, [">= 0"])
-    s.add_dependency(%q<OptionParser>, [">= 0"])
-    s.add_dependency(%q<trollop>, [">= 0"])
-  end
+  s.add_runtime_dependency 'ruport'
+  s.add_runtime_dependency 'gruff'
+  s.add_runtime_dependency 'OptionParser'
+  s.add_runtime_dependency 'trollop'
 end
 
