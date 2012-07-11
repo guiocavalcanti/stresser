@@ -1,7 +1,7 @@
 require 'ruport'
 require 'gruff'
 require 'yaml'
-require 'csv'
+require 'fastercsv'
 
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
@@ -45,7 +45,7 @@ module Grapher
   def generate_report(report_type, csv_file, outfile)
     puts "Generating #{report_type} to #{outfile}..."
     columns = (reports[report_type] or reports[reports.keys.first])
-    save_graph(csv_file, columns, outfile, title: report_type) 
+    save_graph(csv_file, columns, outfile, :title => report_type)
   end
 
   #
@@ -53,7 +53,7 @@ module Grapher
   #
   def save_graph(csv_file, columns, outfile, options = {})
     # Draw graph
-    g = graph(csv_file, columns, title: options[:title] )
+    g = graph(csv_file, columns, :title => options[:title] )
 
     # Save graph
     g.write(outfile)
@@ -64,7 +64,7 @@ module Grapher
   #
   #  The headers are converted to symbols in the Ruby 1.9.X CSV library
   def graph(csv_file, columns, options = {})
-    table = CSV.table(csv_file, headers: true)
+    table = FasterCSV.table(csv_file, :headers => true)
 
     # Prepare data structure
     data = Hash.new
@@ -84,7 +84,7 @@ module Grapher
   #  Reads a YAML file that defines how reports are built
   #
   def reports(report = nil, yaml_file = File.join(File.dirname(__FILE__), "reports.yml"))
-    YAML.load(File.read(yaml_file)) 
+    YAML.load(File.read(yaml_file))
   end
 
   protected
@@ -125,10 +125,10 @@ module Grapher
     colors = %w{EFD279 95CBE9 024769 AFD775 2C5700 DE9D7F B6212D 7F5417}.map{|c| "\##{c}"} 
 
     g.theme = {
-      colors: colors,
-      marker_color: "#cdcdcd",
-      font_color: 'black',
-      background_colors: ['#fefeee', '#ffffff']
+      :colors => colors,
+      :marker_color => "#cdcdcd",
+      :font_color => 'black',
+      :background_colors => ['#fefeee', '#ffffff']
     }
   end
 
