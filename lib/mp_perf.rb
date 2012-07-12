@@ -107,7 +107,8 @@ class MPPerf
       # Save results of this run
       # report << results[rate].merge({'rate' => rate})
       report_hash = results[rate].merge({'rate' => rate})
-      report << report_hash.values
+      values = table_headers.collect {|key| report_hash[key]}
+      report << values
 
       # Try to keep old pending requests from influencing the next round
       sleep(@conf['sleep_time'] || 0)
